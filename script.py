@@ -50,7 +50,7 @@ def main(directory):
     previous_hashes = load_previous_hashes()
    
     added, removed, changed = detect_changes(current_hashes, previous_hashes)
-
+   
     # Report results to the user
     if added or removed or changed:
         print("Changes detected:")
@@ -68,7 +68,7 @@ def main(directory):
                 print("   ", f)
     else:
         print("No changes detected.")
-
+   
     # Save current state for future comparison
     save_hashes(current_hashes)
 
@@ -80,7 +80,7 @@ if __name__ == "__main__":
         target_directory = sys.argv[1]
     else:
         # Option 2:Hardcore your test folder path here
-        target_directory = r"G:Task 1 Folder\.git"
+        target_directory = r"G:Tasks Folder\.git"
 
 if not os.path.exists(target_directory):
         print("Error:Directory does not exist:", target_directory)        
