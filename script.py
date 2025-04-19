@@ -80,7 +80,7 @@ if __name__ == "__main__":
         target_directory = sys.argv[1]
     else:
         # Option 2:Hardcore your test folder path here
-        target_directory = r"G:Tasks Folder\.git"
+        target_directory = r"G:Task 1 Folder\.git"
 
 if not os.path.exists(target_directory):
         print("Error:Directory does not exist:", target_directory)        
