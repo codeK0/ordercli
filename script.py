@@ -75,10 +75,12 @@ def main(directory):
 # Run the script with a directory provided as a command-line argument
 if __name__ == "__main__":
     import sys
+    # Option 1:Get folder path from command-line arguments
     if len(sys.argv) > 1:
         target_directory = sys.argv[1]
     else:
-        target_directory = r"G:\script.py"
+        # Option 2:Hardcore your test folder path here
+        target_directory = r"G:Tasks Folder\.git"
 
 if not os.path.exists(target_directory):
         print("Error:Directory does not exist:", target_directory)        
