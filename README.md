@@ -92,4 +92,4 @@ python script.py
 This tool is useful for developers, analysts, or anyone who wants to track file activity in a folder without manually checking everything.
 
 # OUTPUT
-<img width="476" alt="Image" src="https://github.com/user-attachments/assets/96d01e13-3859-49c5-8f80-61b4f4c8af09" />
+<img width="406" alt="Image" src="https://github.com/user-attachments/assets/9ede3aca-df1b-402b-a51a-4ed0d33febf3" />
