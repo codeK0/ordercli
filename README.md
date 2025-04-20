@@ -90,3 +90,6 @@ python script.py
 
 
 This tool is useful for developers, analysts, or anyone who wants to track file activity in a folder without manually checking everything.
+
+# OUTPUT
+
