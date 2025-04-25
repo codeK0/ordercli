@@ -12,84 +12,65 @@
 
 *MENTOR*: NEELA SANTOSH
 
-## DESCRIPTION OF TASK ##: This Python script is designed to monitor file changes within a specified directory. It detects and logs file creations, modifications, and deletions in real-time.
+# DESCRIPTION OF TASK #: File Change Monitoring Script in Python
 
-Core Modules Used:
+This Python script is built to continuously monitor and track changes within a specific directory on your system. Its primary function is to detect file creations, modifications, and deletions in real-time or between intervals. This is especially useful for developers, system administrators, and cybersecurity analysts who need to keep an eye on important files and folders.
 
-os and time: For file system navigation and timestamping.
+# Core Python Modules Used:
+-os and time: These are used for navigating the file system, retrieving file attributes such as modification times, and implementing time-based functionality like delay or timestamps.
 
-hashlib: To generate file hashes and detect changes.
+-hashlib: Generates MD5 hash values for file contents. This helps in identifying files that have been modified based on their content, even if their names or sizes remain the same.
 
-json: To store and compare file state snapshots.
+-json: Stores and loads snapshots of the file system in a structured format that is easy to compare later.
 
-argparse: For command-line arguments.
+-argparse: Handles command-line arguments to allow flexible script execution and directory specification.
 
+# Editor used: VS Studio
 
-How It Works:
+# How It Works:
+1.Initial Directory Scanning: When the script is first run, it scans the target directory and creates a snapshot of all existing files. For each file, it collects metadata including file path, last modified timestamp, file size, and an MD5 hash of the content.
 
-1. Directory Scanning:
+2.Snapshot Saving: This metadata is stored in a Python dictionary and saved as a JSON file (often named snapshot.json) in the script's directory. This serves as a baseline to detect future changes.
 
-The script scans all files within a given folder and records their last modified time, size, and content hash (MD5).
+3.Change Detection: On subsequent runs, the script re-scans the directory and loads the previous snapshot. It compares each file's current state to its prior state to determine if it:
 
-This metadata is stored in a dictionary and saved to a .json file as a baseline snapshot.
+Was added (exists now but not before),
 
+Was deleted (existed before but not anymore),
 
-2. Change Detection:
+Was modified (exists in both scans but with different timestamps or hashes).
 
-On subsequent runs or on an interval loop, the script re-scans the directory and compares the current state with the previous snapshot.
+4.Logging and Output: Detected changes are printed to the terminal with color-coded logs for better clarity:
 
-It identifies:
+Green: New files
 
-New files (present now but not before),
+Red: Deleted files
 
-Deleted files (in snapshot but not in the current scan),
+Yellow: Modified files
 
-Modified files (same file but changed timestamp or content hash).
+5.Snapshot Update: After logging, the script saves the new state of the folder by updating the snapshot JSON, preparing it for the next run.
 
+# Use Cases:
+-Monitoring source code directories for unauthorized changes
 
-3. Output:
+-Watching log or config folders on servers
 
-Changes are printed in the console in color-coded logs:
+-Auditing file system behavior over time
 
-Green for added,
+-Creating lightweight file integrity monitoring tools
 
-Red for deleted,
+# Git Integration (Optional):
+The script itself, along with its snapshot files, can be version-controlled using Git. This allows users to track both code changes and detected file changes, and even push them to GitHub for backup or collaboration.
 
-Yellow for modified.
+=Typical Workflow:
+-Place the script in or point it to the directory you want to monitor.
 
+-Run it using the command:
+python script.py [optional_directory_path]
 
-The updated snapshot is then saved again for future comparison.
+-Make changes to files: add, delete, or modify.
 
-
-
-4. Use Case:
-
-Run manually or set as a background task to monitor important folders like project directories, system logs, etc.
-
-
-
-5. Git Integration:
-
-The script itself and its tracked changes can be version-controlled using Git. You can commit changes and push them to GitHub for remote backups or collaboration.
-
-
-Typical Workflow:
-
-1. Place the script in your desired folder.
-
-
-2. Run it using:
-
-python script.py
-
-
-3. Modify, add, or delete files in that folder.
-
-
-4. Re-run the script to detect and log those changes.
-
-
-This tool is useful for developers, analysts, or anyone who wants to track file activity in a folder without manually checking everything.
+-Run the script again to view a log of those changes.
 
 # OUTPUT
 <img width="406" alt="Image" src="https://github.com/user-attachments/assets/9ede3aca-df1b-402b-a51a-4ed0d33febf3" />
