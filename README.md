@@ -29,17 +29,13 @@ Manual:
 
 ## Login
 
-`oauth2/token` needs a `client_secret` (the app fetches it via remote config). Provide it as env var:
+`oauth2/token` needs a `client_secret` (the app fetches it via remote config). `foodoracli` auto-fetches it on first use and caches it locally.
+
+Optional override (keeps secrets out of shell history):
 
 ```sh
 export FOODORA_CLIENT_SECRET='...'
 ./foodoracli login --email you@example.com --password-stdin
-```
-
-Or fetch it via Firebase Remote Config (APK-derived config) and store in your local config:
-
-```sh
-./foodoracli secret fetch --store
 ```
 
 If MFA triggers, rerun with the printed `--mfa-token` and pass `--otp <CODE>`.

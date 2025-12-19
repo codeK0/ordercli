@@ -2,7 +2,6 @@ package cli
 
 import (
 	"errors"
-	"os"
 
 	"github.com/steipete/foodoracli/internal/config"
 )
@@ -44,10 +43,3 @@ func (s *state) save() error {
 }
 
 func (s *state) markDirty() { s.dirty = true }
-
-func (s *state) clientSecretOrEnv() string {
-	if s.cfg.ClientSecret != "" {
-		return s.cfg.ClientSecret
-	}
-	return os.Getenv("FOODORA_CLIENT_SECRET")
-}

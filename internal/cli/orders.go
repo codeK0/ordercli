@@ -91,13 +91,13 @@ func newAuthedClient(st *state) (*foodora.Client, error) {
 
 	now := time.Now()
 	if st.cfg.TokenLikelyExpired(now) {
-		secret := st.clientSecretOrEnv()
-		if secret == "" {
-			return nil, errors.New("token expired and no client secret available to refresh (set FOODORA_CLIENT_SECRET or run `foodoracli login --store-client-secret ...`)")
+		sec, err := st.resolveClientSecret(context.Background())
+		if err != nil {
+			return nil, err
 		}
 		tok, err := c.OAuthTokenRefresh(context.Background(), foodora.OAuthRefreshRequest{
 			RefreshToken: st.cfg.RefreshToken,
-			ClientSecret: secret,
+			ClientSecret: sec.Secret,
 		})
 		if err != nil {
 			return nil, err

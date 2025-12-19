@@ -37,10 +37,15 @@ func newLoginCmd(st *state) *cobra.Command {
 			}
 
 			if clientSecret == "" {
-				clientSecret = st.clientSecretOrEnv()
-			}
-			if clientSecret == "" {
-				return errors.New("missing client secret (pass --client-secret or set FOODORA_CLIENT_SECRET; optionally persist via --store-client-secret)")
+				// Prefer cached/env; if missing, auto-fetch via Remote Config and cache.
+				sec, err := st.resolveClientSecret(cmd.Context())
+				if err != nil {
+					return err
+				}
+				clientSecret = sec.Secret
+			} else if storeClientSecret {
+				st.cfg.ClientSecret = clientSecret
+				st.markDirty()
 			}
 
 			if passwordStdin {
@@ -98,9 +103,6 @@ func newLoginCmd(st *state) *cobra.Command {
 			st.cfg.AccessToken = tok.AccessToken
 			st.cfg.RefreshToken = tok.RefreshToken
 			st.cfg.ExpiresAt = tok.ExpiresAt(now)
-			if storeClientSecret {
-				st.cfg.ClientSecret = clientSecret
-			}
 			st.markDirty()
 			fmt.Fprintln(cmd.OutOrStdout(), "ok")
 			return nil
@@ -113,8 +115,8 @@ func newLoginCmd(st *state) *cobra.Command {
 	cmd.Flags().StringVar(&otpMethod, "otp-method", "sms", "OTP/MFA channel (e.g. sms, call)")
 	cmd.Flags().StringVar(&mfaToken, "mfa-token", "", "MFA token from a prior mfa_triggered response")
 	cmd.Flags().StringVar(&otp, "otp", "", "OTP code for MFA verification")
-	cmd.Flags().StringVar(&clientSecret, "client-secret", "", "oauth client secret (see FOODORA_CLIENT_SECRET)")
-	cmd.Flags().BoolVar(&storeClientSecret, "store-client-secret", false, "persist client secret into config file")
+	cmd.Flags().StringVar(&clientSecret, "client-secret", "", "oauth client secret (optional; otherwise auto-fetched)")
+	cmd.Flags().BoolVar(&storeClientSecret, "store-client-secret", false, "persist --client-secret into config file")
 	return cmd
 }
 
