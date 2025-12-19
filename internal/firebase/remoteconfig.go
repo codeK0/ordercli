@@ -33,6 +33,17 @@ var NetPincerHU = APKFirebaseConfig{
 	CertSHA1: "D106C8D37D4BF7D6F9DA124821503EE89CCB073A",
 }
 
+// Austria (mjam) values, extracted from the provided APKM.
+var MjamAT = APKFirebaseConfig{
+	APIKey:      "AIzaSyAvzoLO009Yw95ttPkyaWgB7Y702vAYIJI",
+	ProjectID:   "mjam-2a6af",
+	ProjectNum:  "384955814039",
+	AppID:       "1:384955814039:android:d8bb88d8282d022e",
+	PackageName: "at.mjam",
+	// SHA1 of signing cert (no colons): from META-INF/BNDLTOOL.RSA
+	CertSHA1: "652032D6965AD6088910438C41096D92D36EAD4A",
+}
+
 type RemoteConfigClient struct {
 	cfg  APKFirebaseConfig
 	http *http.Client

@@ -19,6 +19,7 @@ type OAuthPasswordRequest struct {
 	Username     string
 	Password     string
 	ClientSecret string
+	ClientID     string
 	OTPMethod    string
 	OTPCode      string
 	MfaToken     string
@@ -27,6 +28,7 @@ type OAuthPasswordRequest struct {
 type OAuthRefreshRequest struct {
 	RefreshToken string
 	ClientSecret string
+	ClientID     string
 }
 
 type ActiveOrdersResponse struct {

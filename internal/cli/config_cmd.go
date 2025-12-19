@@ -36,6 +36,18 @@ func newConfigShowCmd(st *state) *cobra.Command {
 			if st.cfg.ClientSecret != "" {
 				fmt.Fprintf(cmd.OutOrStdout(), "client_secret=*** (stored)\n")
 			}
+			if st.cfg.OAuthClientID != "" {
+				fmt.Fprintf(cmd.OutOrStdout(), "oauth_client_id=%s\n", st.cfg.OAuthClientID)
+			}
+			if st.cfg.HTTPUserAgent != "" {
+				fmt.Fprintf(cmd.OutOrStdout(), "http_user_agent=%s\n", st.cfg.HTTPUserAgent)
+			}
+			if len(st.cfg.CookiesByHost) > 0 {
+				fmt.Fprintf(cmd.OutOrStdout(), "cookies_by_host=*** (%d)\n", len(st.cfg.CookiesByHost))
+			}
+			if st.cfg.PendingMfaToken != "" {
+				fmt.Fprintf(cmd.OutOrStdout(), "pending_mfa=*** (%s, %s)\n", st.cfg.PendingMfaChannel, st.cfg.PendingMfaEmail)
+			}
 		},
 	}
 }
@@ -80,7 +92,7 @@ func newConfigSetCmd(st *state) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&country, "country", "", "country preset (HU, SK, DL)")
+	cmd.Flags().StringVar(&country, "country", "", "country preset (HU, SK, DL, AT)")
 	cmd.Flags().StringVar(&baseURL, "base-url", "", "API base URL (e.g. https://hu.fd-api.com/api/v5/)")
 	cmd.Flags().StringVar(&globalEntityID, "global-entity-id", "", "X-Global-Entity-ID (e.g. NP_HU)")
 	cmd.Flags().StringVar(&targetISO, "target-iso", "", "X-Target-Country-Code-ISO (e.g. HU)")

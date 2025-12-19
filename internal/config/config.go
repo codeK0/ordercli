@@ -20,6 +20,15 @@ type Config struct {
 	RefreshToken     string    `json:"refresh_token,omitempty"`
 	ExpiresAt        time.Time `json:"expires_at,omitempty"`
 	ClientSecret     string    `json:"client_secret,omitempty"`
+	OAuthClientID    string    `json:"oauth_client_id,omitempty"`
+
+	HTTPUserAgent string            `json:"http_user_agent,omitempty"`
+	CookiesByHost map[string]string `json:"cookies_by_host,omitempty"`
+
+	PendingMfaToken     string    `json:"pending_mfa_token,omitempty"`
+	PendingMfaChannel   string    `json:"pending_mfa_channel,omitempty"`
+	PendingMfaEmail     string    `json:"pending_mfa_email,omitempty"`
+	PendingMfaCreatedAt time.Time `json:"pending_mfa_created_at,omitempty"`
 }
 
 func DefaultPath() (string, error) {

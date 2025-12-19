@@ -20,18 +20,26 @@ type Client struct {
 	deviceID       string
 	globalEntityID string
 	targetISO      string
+	cookieHeader   string
+	fpAPIKey       string
+	appName        string
+	originalUA     string
 
 	accessToken string
 	userAgent   string
 }
 
 type Options struct {
-	BaseURL          string
-	DeviceID         string
-	GlobalEntityID   string
-	TargetCountryISO string
-	AccessToken      string
-	UserAgent        string
+	BaseURL           string
+	DeviceID          string
+	GlobalEntityID    string
+	TargetCountryISO  string
+	AccessToken       string
+	UserAgent         string
+	CookieHeader      string
+	FPAPIKey          string
+	AppName           string
+	OriginalUserAgent string
 }
 
 func New(opts Options) (*Client, error) {
@@ -59,6 +67,10 @@ func New(opts Options) (*Client, error) {
 		deviceID:       opts.DeviceID,
 		globalEntityID: opts.GlobalEntityID,
 		targetISO:      opts.TargetCountryISO,
+		cookieHeader:   opts.CookieHeader,
+		fpAPIKey:       opts.FPAPIKey,
+		appName:        opts.AppName,
+		originalUA:     opts.OriginalUserAgent,
 		accessToken:    opts.AccessToken,
 		userAgent:      ua,
 	}, nil
@@ -73,7 +85,11 @@ func (c *Client) OAuthTokenPassword(ctx context.Context, req OAuthPasswordReques
 	values.Set("grant_type", "password")
 	values.Set("client_secret", req.ClientSecret)
 	values.Set("scope", "API_CUSTOMER")
-	values.Set("client_id", "android")
+	clientID := req.ClientID
+	if clientID == "" {
+		clientID = "android"
+	}
+	values.Set("client_id", clientID)
 
 	return c.oauthToken(ctx, values, oauthHeaders{
 		otpMethod: req.OTPMethod,
@@ -88,7 +104,11 @@ func (c *Client) OAuthTokenRefresh(ctx context.Context, req OAuthRefreshRequest)
 	values.Set("refresh_token", req.RefreshToken)
 	values.Set("client_secret", req.ClientSecret)
 	values.Set("scope", "API_CUSTOMER")
-	values.Set("client_id", "android")
+	clientID := req.ClientID
+	if clientID == "" {
+		clientID = "android"
+	}
+	values.Set("client_id", clientID)
 
 	token, _, err := c.oauthToken(ctx, values, oauthHeaders{
 		otpMethod: "",
@@ -135,8 +155,21 @@ func (c *Client) oauthToken(ctx context.Context, form url.Values, h oauthHeaders
 	if c.userAgent != "" {
 		req.Header.Set("User-Agent", c.userAgent)
 	}
+	if c.originalUA != "" {
+		req.Header.Set("X-Original-User-Agent", c.originalUA)
+	}
 	if c.deviceID != "" {
 		req.Header.Set("X-Device", c.deviceID)
+		req.Header.Set("Device-Id", c.deviceID)
+	}
+	if c.cookieHeader != "" {
+		req.Header.Set("Cookie", c.cookieHeader)
+	}
+	if c.fpAPIKey != "" {
+		req.Header.Set("X-FP-API-KEY", c.fpAPIKey)
+	}
+	if c.appName != "" {
+		req.Header.Set("App-Name", c.appName)
 	}
 	req.Header.Set("X-OTP-Method", h.otpMethod)
 	if h.otpCode != "" {
@@ -195,8 +228,21 @@ func (c *Client) getJSON(ctx context.Context, path string, query url.Values, out
 	if c.userAgent != "" {
 		req.Header.Set("User-Agent", c.userAgent)
 	}
+	if c.originalUA != "" {
+		req.Header.Set("X-Original-User-Agent", c.originalUA)
+	}
 	if c.deviceID != "" {
 		req.Header.Set("X-Device", c.deviceID)
+		req.Header.Set("Device-Id", c.deviceID)
+	}
+	if c.cookieHeader != "" {
+		req.Header.Set("Cookie", c.cookieHeader)
+	}
+	if c.fpAPIKey != "" {
+		req.Header.Set("X-FP-API-KEY", c.fpAPIKey)
+	}
+	if c.appName != "" {
+		req.Header.Set("App-Name", c.appName)
 	}
 	if c.globalEntityID != "" {
 		req.Header.Set("X-Global-Entity-ID", c.globalEntityID)

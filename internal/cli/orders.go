@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -77,13 +78,32 @@ func newAuthedClient(st *state) (*foodora.Client, error) {
 		return nil, errors.New("not logged in (run `foodoracli login ...`)")
 	}
 
+	_, cookie := st.cookieHeaderForBaseURL()
+	prof := st.appHeaders()
+	ua := st.cfg.HTTPUserAgent
+	if ua == "" && prof.UserAgent != "" {
+		ua = prof.UserAgent
+	}
+	if ua == "" {
+		ua = "foodoracli/" + version.Version
+	}
+
 	c, err := foodora.New(foodora.Options{
 		BaseURL:          st.cfg.BaseURL,
 		DeviceID:         st.cfg.DeviceID,
 		GlobalEntityID:   st.cfg.GlobalEntityID,
 		TargetCountryISO: st.cfg.TargetCountryISO,
 		AccessToken:      st.cfg.AccessToken,
-		UserAgent:        "foodoracli/" + version.Version,
+		UserAgent:        ua,
+		CookieHeader:     cookie,
+		FPAPIKey:         prof.FPAPIKey,
+		AppName:          prof.AppName,
+		OriginalUserAgent: func() string {
+			if strings.HasPrefix(ua, "Android-app-") {
+				return ua
+			}
+			return ""
+		}(),
 	})
 	if err != nil {
 		return nil, err
@@ -91,13 +111,14 @@ func newAuthedClient(st *state) (*foodora.Client, error) {
 
 	now := time.Now()
 	if st.cfg.TokenLikelyExpired(now) {
-		sec, err := st.resolveClientSecret(context.Background())
+		sec, err := st.resolveClientSecret(context.Background(), st.cfg.OAuthClientID)
 		if err != nil {
 			return nil, err
 		}
 		tok, err := c.OAuthTokenRefresh(context.Background(), foodora.OAuthRefreshRequest{
 			RefreshToken: st.cfg.RefreshToken,
 			ClientSecret: sec.Secret,
+			ClientID:     st.cfg.OAuthClientID,
 		})
 		if err != nil {
 			return nil, err
