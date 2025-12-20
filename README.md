@@ -69,6 +69,28 @@ Tip: use a persistent profile to keep browser cookies/storage between runs (redu
 ./foodcli login --email you@example.com --password-stdin --browser --browser-profile "$HOME/Library/Application Support/foodcli/browser-profile"
 ```
 
+### Import cookies from Chrome (no browser run)
+
+If you already solved bot protection / logged in in Chrome, you can import the cookies for the current `base_url` host:
+
+```sh
+./foodcli cookies chrome --profile "Default"
+./foodcli orders
+```
+
+If you have multiple profiles, try `--profile "Profile 1"` (or pass a profile path / Cookies DB via `--cookie-path`).
+
+### Import session from Chrome (no password)
+
+If you’re logged in on the website in Chrome, you can import `refresh_token` + `device_token` and then refresh to an API access token:
+
+```sh
+./foodcli session chrome --url https://www.foodora.at/ --profile "Default"
+./foodcli session refresh --client-id android
+./foodcli history
+```
+If `session refresh` errors with “refresh token … not found”, that site session isn’t valid for your configured `base_url` (common for some regions).
+
 ## Orders
 
 ```sh

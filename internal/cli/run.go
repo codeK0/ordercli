@@ -39,6 +39,8 @@ func newRoot() *cobra.Command {
 
 	cmd.AddCommand(newCountriesCmd(st))
 	cmd.AddCommand(newConfigCmd(st))
+	cmd.AddCommand(newCookiesCmd(st))
+	cmd.AddCommand(newSessionCmd(st))
 	cmd.AddCommand(newLoginCmd(st))
 	cmd.AddCommand(newLogoutCmd(st))
 	cmd.AddCommand(newOrdersCmd(st))

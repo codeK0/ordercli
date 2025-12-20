@@ -27,7 +27,12 @@ func (s *state) resolveClientSecret(ctx context.Context, clientID string) (resol
 		clientID = "android"
 	}
 
-	if s.cfg.ClientSecret != "" && (s.cfg.OAuthClientID == "" || s.cfg.OAuthClientID == clientID) {
+	// Only reuse cached secrets when we know which client_id they belong to.
+	// Legacy configs may have a stored secret without oauth_client_id; assume that is for android only.
+	if s.cfg.ClientSecret != "" && strings.EqualFold(strings.TrimSpace(s.cfg.OAuthClientID), clientID) {
+		return resolvedSecret{Secret: s.cfg.ClientSecret, FromConfig: true}, nil
+	}
+	if s.cfg.ClientSecret != "" && strings.TrimSpace(s.cfg.OAuthClientID) == "" && clientID == "android" {
 		return resolvedSecret{Secret: s.cfg.ClientSecret, FromConfig: true}, nil
 	}
 	if v := os.Getenv("FOODORA_CLIENT_SECRET"); v != "" {
@@ -43,6 +48,28 @@ func (s *state) resolveClientSecret(ctx context.Context, clientID string) (resol
 	}
 
 	// Cache for next run.
+	s.cfg.ClientSecret = secret
+	s.cfg.OAuthClientID = clientID
+	s.markDirty()
+	return resolvedSecret{Secret: secret, FromFetch: true}, nil
+}
+
+func (s *state) forceFetchClientSecret(ctx context.Context, clientID string) (resolvedSecret, error) {
+	if clientID == "" {
+		clientID = strings.TrimSpace(s.cfg.OAuthClientID)
+	}
+	if clientID == "" {
+		clientID = "android"
+	}
+
+	secret, err := fetchClientSecretFromRemoteConfig(ctx, s.firebaseConfig(), s.remoteConfigKeyCandidates(), clientID)
+	if err != nil {
+		return resolvedSecret{}, err
+	}
+	if secret == "" {
+		return resolvedSecret{}, errors.New("fetched empty client secret")
+	}
+
 	s.cfg.ClientSecret = secret
 	s.cfg.OAuthClientID = clientID
 	s.markDirty()
