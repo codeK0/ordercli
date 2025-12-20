@@ -36,3 +36,6 @@
 - Config defaults to the OS config directory; override for testing with:
   - `./ordercli --config /tmp/ordercli.json foodora config show`
 - Provider-specific auth flows are documented in `README.md` (Foodora/Deliveroo sections).
+
+## Food Requests (Agent Behavior)
+- When Peter asks for food/foodora orders, return full order details by default (not summary-only).
