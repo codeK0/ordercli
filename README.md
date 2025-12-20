@@ -1,6 +1,4 @@
-# ordercli 🛵
-
-Your takeout timeline, in the terminal.
+# 🛵 ordercli — Your takeout timeline, in the terminal.
 
 Repo: `github.com/steipete/ordercli`
 
