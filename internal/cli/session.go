@@ -199,6 +199,11 @@ func newSessionRefreshCmd(st *state) *cobra.Command {
 				st.cfg.RefreshToken = tok.RefreshToken
 			}
 			st.cfg.ExpiresAt = tok.ExpiresAt(now)
+			if st.cfg.ExpiresAt.IsZero() {
+				if exp, ok := st.cfg.AccessTokenExpiresAt(); ok {
+					st.cfg.ExpiresAt = exp
+				}
+			}
 			st.cfg.OAuthClientID = clientID
 			st.markDirty()
 			fmt.Fprintln(cmd.OutOrStdout(), "ok")

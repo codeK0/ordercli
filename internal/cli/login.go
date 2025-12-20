@@ -13,6 +13,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/steipete/foodcli/internal/browserauth"
+	"github.com/steipete/foodcli/internal/config"
 	"github.com/steipete/foodcli/internal/foodora"
 	"github.com/steipete/foodcli/internal/version"
 	"golang.org/x/term"
@@ -130,6 +131,11 @@ func newLoginCmd(st *state) *cobra.Command {
 					st.cfg.AccessToken = tok.AccessToken
 					st.cfg.RefreshToken = tok.RefreshToken
 					st.cfg.ExpiresAt = tok.ExpiresAt(now)
+					if st.cfg.ExpiresAt.IsZero() {
+						if exp, ok := config.AccessTokenExpiresAt(tok.AccessToken); ok {
+							st.cfg.ExpiresAt = exp
+						}
+					}
 					st.markDirty()
 					fmt.Fprintln(cmd.OutOrStdout(), "ok")
 					return nil

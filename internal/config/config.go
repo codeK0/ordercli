@@ -111,6 +111,9 @@ func (c Config) TokenLikelyExpired(now time.Time) bool {
 		return true
 	}
 	if c.ExpiresAt.IsZero() {
+		if exp, ok := c.AccessTokenExpiresAt(); ok {
+			return !exp.After(now.Add(30 * time.Second))
+		}
 		return false
 	}
 	return !c.ExpiresAt.After(now.Add(30 * time.Second))
